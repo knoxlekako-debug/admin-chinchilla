@@ -1,0 +1,26 @@
+{
+  "name": "Admin Chinchilla",
+  "short_name": "AdminChin",
+  "description": "Sistema de administración para Chinchilla",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#50514F",
+  "theme_color": "#6BBE66",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
