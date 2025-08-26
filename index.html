@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Admin Chinchilla">
+    <meta name="theme-color" content="#50514F">
+    <title>Admin Chinchilla</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <style>
+        :root {
+            --primary-color: #6BBE66;
+            --secondary-color: #50514F;
+            --yellow-color: #FFD700;
+            --blue-color: #3498db;
+            --red-color: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #50514F 0%, #2d2d2d 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding: 5px;
+        }
+        
+        .card {
+            background: rgba(80, 81, 79, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(107, 190, 102, 0.3);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #6BBE66 0%, #4CAF50 100%);
+            color: #50514F;
+            padding: 15px;
+            text-align: center;
+            border-radius: 15px 15px 0 0;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(107, 190, 102, 0.3);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #6BBE66 0%, #4CAF50 100%);
+            color: #50514F;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(107, 190, 102, 0.3);
+            margin: 5px;
+        }
+        
+        .btn:active {
+            transform: scale(0.95);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #6BBE66;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #6BBE66;
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #50514F;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            border-bottom: 1px solid #6BBE66;
+            margin-bottom: 15px;
+        }
+        
+        .nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .nav-tab {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: white;
+            font-size: 13px;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tab.active {
+            color: #6BBE66;
+            border-bottom-color: #6BBE66;
+            font-weight: bold;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        
+        .table th {
+            background: #6BBE66;
+            color: #50514F;
+            padding: 8px 4px;
+            text-align: left;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+        
+        .table td {
+            padding: 8px 4px;
+            border-bottom: 1px solid rgba(107, 190, 102, 0.3);
+        }
+        
+        .table input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 11px;
+        }
+        
+        .total-row {
+            background: rgba(107, 190, 102, 0.2);
+            font-weight: bold;
+        }
+        
+        .tools-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .links-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .dollar-link {
+            padding: 10px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+            flex: 1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .bcv-link {
+            background: linear-gradient(135deg, #FFD700 0%, #F39C12 100%);
+            color: #333;
+        }
+        
+        .usdt-link {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+        
+        .calculator {
+            background: rgba(107, 190, 102, 0.1);
+            border: 1px solid #6BBE66;
+            border-radius: 12px;
+            padding: 10px;
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+        
+        .calculator-display {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 10px;
+            padding: 8px;
+            text-align: right;
+            font-size: 18px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #50514F;
+            border: 1px solid #6BBE66;
+            border-radius: 8px;
+        }
+        
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+        }
+        
+        .calc-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        
+        .calc-btn.clear {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .calc-btn.equals {
+            background: #3498db;
+            color: white;
+        }
+        
+        .calc-btn.operator {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .calc-btn:not(.clear):not(.equals):not(.operator) {
+            background: rgba(107, 190, 102, 0.8);
+            color: #50514F;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #6BBE66 0%, #4CAF50 100%);
+            color: #50514F;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            font-weight: bold;
+            max-width: 90%;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translate(-50%, -100%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 3px;
+            }
+            
+            .card {
+                padding: 10px;
+                border-radius: 12px;
+            }
+            
+            .header {
+                font-size: 16px;
+                padding: 12px;
+            }
+            
+            .btn {
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+            
+            .table th, .table td {
+                padding: 6px 3px;
+                font-size: 11px;
+            }
+            
+            .nav-tab {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+            
+            .links-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Login Section -->
+        <div id="loginSection" class="container">
+            <div class="card">
+                <div class="header">
+                    <h2>Admin Chinchilla</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="username">Usuario</label>
+                        <input type="text" id="username" class="form-control" placeholder="Ingrese su usuario">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" class="form-control" placeholder="Ingrese su contraseña">
+                    </div>
+                    <button id="loginBtn" class="btn" style="width: 100%;">Iniciar Sesión</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Application -->
+        <div id="mainSection" class="container hidden">
+            <div class="card">
+                <div class="header">
+                    <h2>Admin Chinchilla</h2>
+                    <div id="currentDateTime" style="font-size: 12px; margin-top: 5px;"></div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="nav-tabs">
+                        <div class="nav-tab active" data-tab="general">General</div>
+                        <div class="nav-tab" data-tab="expenses">Gastos</div>
+                        <div class="nav-tab admin-only" data-tab="employees">Empleados</div>
+                        <div class="nav-tab admin-only" data-tab="changePassword">Contraseña</div>
+                        <div class="nav-tab admin-only" data-tab="summary">Resumen</div>
+                    </div>
+                    
+                    <!-- General Tab -->
+                    <div id="generalTab" class="tab-content active">
+                        <h3 style="margin-bottom: 10px; color: #6BBE66;">Registro General</h3>
+                        <div class="tools-container">
+                            <div class="links-container">
+                                <a href="https://www.bcv.org.ve/" target="_blank" class="dollar-link bcv-link">Dolar BCV</a>
+                                <a href="https://p2p.binance.com/trade/all-payments/USDT?fiat=VES" target="_blank" class="dollar-link usdt-link">Dolar USDT</a>
+                            </div>
+                            <button id="addRowGeneral" class="btn btn-success">Agregar Fila</button>
+                            <div class="calculator">
+                                <input type="text" id="calcDisplayGeneral" class="calculator-display" readonly>
+                                <div class="calculator-buttons">
+                                    <button class="calc-btn clear" data-calc="clear">C</button>
+                                    <button class="calc-btn" data-calc="(">(</button>
+                                    <button class="calc-btn" data-calc=")">)</button>
+                                    <button class="calc-btn operator" data-calc="/">/</button>
+                                    <button class="calc-btn" data-calc="7">7</button>
+                                    <button class="calc-btn" data-calc="8">8</button>
+                                    <button class="calc-btn" data-calc="9">9</button>
+                                    <button class="calc-btn operator" data-calc="*">×</button>
+                                    <button class="calc-btn" data-calc="4">4</button>
+                                    <button class="calc-btn" data-calc="5">5</button>
+                                    <button class="calc-btn" data-calc="6">6</button>
+                                    <button class="calc-btn operator" data-calc="-">-</button>
+                                    <button class="calc-btn" data-calc="1">1</button>
+                                    <button class="calc-btn" data-calc="2">2</button>
+                                    <button class="calc-btn" data-calc="3">3</button>
+                                    <button class="calc-btn operator" data-calc="+">+</button>
+                                    <button class="calc-btn" data-calc="0">0</button>
+                                    <button class="calc-btn" data-calc=".">.</button>
+                                    <button class="calc-btn equals" data-calc="=">=</button>
+                                    <button class="calc-btn operator" data-calc="sqrt">√</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table id="generalTable" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Material</th>
+                                        <th>Tipo</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio</th>
+                                        <th>Recibido</th>
+                                        <th>Dentino</th>
+                                        <th>Precio Ves</th>
+                                        <th>Precio USD</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="total-row">
+                                        <td>Total</td>
+                                        <td>-</td>
+                                        <td id="totalCantidad">0</td>
+                                        <td id="totalPrecio">0</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td id="totalPrecioVes">0</td>
+                                        <td id="totalPrecioUSD">0</td>
+                                        <td>-</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Expenses Tab -->
+                    <div id="expensesTab" class="tab-content">
+                        <h3 style="margin-bottom: 10px; color: #6BBE66;">Registro de Gastos</h3>
+                        <div class="tools-container">
+                            <div class="links-container">
+                                <a href="https://www.bcv.org.ve/" target="_blank" class="dollar-link bcv-link">Dolar BCV</a>
+                                <a href="https://p2p.binance.com/trade/all-payments/USDT?fiat=VES" target="_blank" class="dollar-link usdt-link">Dolar USDT</a>
+                            </div>
+                            <button id="addRowExpenses" class="btn btn-success">Agregar Fila</button>
+                            <div class="calculator">
+                                <input type="text" id="calcDisplayExpenses" class="calculator-display" readonly>
+                                <div class="calculator-buttons">
+                                    <button class="calc-btn clear" data-calc="clear">C</button>
+                                    <button class="calc-btn" data-calc="(">(</button>
+                                    <button class="calc-btn" data-calc=")">)</button>
+                                    <button class="calc-btn operator" data-calc="/">/</button>
+                                    <button class="calc-btn" data-calc="7">7</button>
+                                    <button class="calc-btn" data-calc="8">8</button>
+                                    <button class="calc-btn" data-calc="9">9</button>
+                                    <button class="calc-btn operator" data-calc="*">×</button>
+                                    <button class="calc-btn" data-calc="4">4</button>
+                                    <button class="calc-btn" data-calc="5">5</button>
+                                    <button class="calc-btn" data-calc="6">6</button>
+                                    <button class="calc-btn operator" data-calc="-">-</button>
+                                    <button class="calc-btn" data-calc="1">1</button>
+                                    <button class="calc-btn" data-calc="2">2</button>
+                                    <button class="calc-btn" data-calc="3">3</button>
+                                    <button class="calc-btn operator" data-calc="+">+</button>
+                                    <button class="calc-btn" data-calc="0">0</button>
+                                    <button class="calc-btn" data-calc=".">.</button>
+                                    <button class="calc-btn equals" data-calc="=">=</button>
+                                    <button class="calc-btn operator" data-calc="sqrt">√</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table id="expensesTable" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Ingresos</th>
+                                        <th>Cantidad</th>
+                                        <th>Total</th>
+                                        <th>Egresos</th>
+                                        <th>Egresos Total</th>
+                                        <th>Operaciones</th>
+                                        <th>Salarios</th>
+                                        <th>Adm</th>
+                                        <th>Mantenimiento</th>
+                                        <th>Expansiones</th>
+                                        <th>Mejoras</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="total-row">
+                                        <td>Total</td>
+                                        <td id="totalExpCantidad">0</td>
+                                        <td id="totalExpCantidadTotal">0</td>
+                                        <td>-</td>
+                                        <td id="totalExpEgresosTotal">0</td>
+                                        <td id="totalExpGastosOperaciones">0</td>
+                                        <td id="totalExpSalarios">0</td>
+                                        <td id="totalExpGastosAdm">0</td>
+                                        <td id="totalExpMantenimiento">0</td>
+                                        <td id="totalExpExpansiones">0</td>
+                                        <td id="totalExpMejoras">0</td>
+                                        <td>-</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Employees Tab -->
+                    <div id="employeesTab" class="tab-content admin-only">
+                        <h3 style="margin-bottom: 10px; color: #6BBE66;">Registro de Empleados</h3>
+                        <div class="tools-container">
+                            <div class="links-container">
+                                <a href="https://www.bcv.org.ve/" target="_blank" class="dollar-link bcv-link">Dolar BCV</a>
+                                <a href="https://p2p.binance.com/trade/all-payments/USDT?fiat=VES" target="_blank" class="dollar-link usdt-link">Dolar USDT</a>
+                            </div>
+                            <button id="addRowEmployees" class="btn btn-success">Agregar Fila</button>
+                            <div class="calculator">
+                                <input type="text" id="calcDisplayEmployees" class="calculator-display" readonly>
+                                <div class="calculator-buttons">
+                                    <button class="calc-btn clear" data-calc="clear">C</button>
+                                    <button class="calc-btn" data-calc="(">(</button>
+                                    <button class="calc-btn" data-calc=")">)</button>
+                                    <button class="calc-btn operator" data-calc="/">/</button>
+                                    <button class="calc-btn" data-calc="7">7</button>
+                                    <button class="calc-btn" data-calc="8">8</button>
+                                    <button class="calc-btn" data-calc="9">9</button>
+                                    <button class="calc-btn operator" data-calc="*">×</button>
+                                    <button class="calc-btn" data-calc="4">4</button>
+                                    <button class="calc-btn" data-calc="5">5</button>
+                                    <button class="calc-btn" data-calc="6">6</button>
+                                    <button class="calc-btn operator" data-calc="-">-</button>
+                                    <button class="calc-btn" data-calc="1">1</button>
+                                    <button class="calc-btn" data-calc="2">2</button>
+                                    <button class="calc-btn" data-calc="3">3</button>
+                                    <button class="calc-btn operator" data-calc="+">+</button>
+                                    <button class="calc-btn" data-calc="0">0</button>
+                                    <button class="calc-btn" data-calc=".">.</button>
+                                    <button class="calc-btn equals" data-calc="=">=</button>
+                                    <button class="calc-btn operator" data-calc="sqrt">√</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table id="employeesTable" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Empleado</th>
+                                        <th>Días</th>
+                                        <th>Noches</th>
+                                        <th>Redobles</th>
+                                        <th>Cargo</th>
+                                        <th>Salario día</th>
+                                        <th>Salario noche</th>
+                                        <th>Redobles</th>
+                                        <th>Día libre</th>
+                                        <th>Descuentos</th>
+                                        <th>Otros</th>
+                                        <th>Inicio</th>
+                                        <th>Fin</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="total-row">
+                                        <td>Total</td>
+                                        <td id="totalEmpDias">0</td>
+                                        <td id="totalEmpNoches">0</td>
+                                        <td id="totalEmpRedobles">0</td>
+                                        <td>-</td>
+                                        <td id="totalEmpSalarioDia">0</td>
+                                        <td id="totalEmpSalarioNoche">0</td>
+                                        <td id="totalEmpRedoblesPago">0</td>
+                                        <td>-</td>
+                                        <td id="totalEmpDescuentos">0</td>
+                                        <td id="totalEmpOtros">0</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Change Password Tab -->
+                    <div id="changePasswordTab" class="tab-content admin-only">
+                        <h3 style="margin-bottom: 10px; color: #6BBE66;">Cambiar Contraseña</h3>
+                        <div class="form-group">
+                            <label for="currentPassword">Contraseña Actual</label>
+                            <input type="password" id="currentPassword" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">Nueva Contraseña</label>
+                            <input type="password" id="newPassword" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+                            <input type="password" id="confirmPassword" class="form-control">
+                        </div>
+                        <button id="changePasswordBtn" class="btn" style="width: 100%;">Cambiar Contraseña</button>
+                    </div>
+                    
+                    <!-- Summary Tab -->
+                    <div id="summaryTab" class="tab-content admin-only">
+                        <h3 style="margin-bottom: 10px; color: #6BBE66;">Resumen del Día</h3>
+                        <div id="summaryContent" style="background: rgba(107, 190, 102, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                            <p>El resumen se generará automáticamente al final del día (11:59 PM).</p>
+                        </div>
+                        <div id="downloadOptions" class="hidden">
+                            <button id="downloadPDF" class="btn" style="width: 48%; margin-right: 4%;">Descargar PDF</button>
+                            <button id="downloadExcel" class="btn" style="width: 48%;">Descargar Excel</button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; text-align: center;">
+                        <button id="logoutBtn" class="btn btn-danger">Cerrar Sesión</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification hidden"></div>
+    
+    <script>
+        // User data
+        const users = [
+            { username: 'SrChinchilla', password: 'Chin+58414-5043504', isAdmin: true },
+            { username: 'SraChinchilla', password: 'Chin+58414-5043504', isAdmin: true },
+            { username: 'trabajador1', password: 'Chin+58414-5043504', isAdmin: false },
+            { username: 'trabajador2', password: 'Chin+58414-5043504', isAdmin: false }
+        ];
+        
+        let userData = JSON.parse(localStorage.getItem('userData')) || users.map(user => ({ ...user }));
+        let currentUser = null;
+        
+        // DOM elements
+        const loginSection = document.getElementById('loginSection');
+        const mainSection = document.getElementById('mainSection');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const currentDateTime = document.getElementById('currentDateTime');
+        const notification = document.getElementById('notification');
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const generalTable = document.getElementById('generalTable').querySelector('tbody');
+        const expensesTable = document.getElementById('expensesTable').querySelector('tbody');
+        const employeesTable = document.getElementById('employeesTable').querySelector('tbody');
+        const addRowGeneralBtn = document.getElementById('addRowGeneral');
+        const addRowExpensesBtn = document.getElementById('addRowExpenses');
+        const addRowEmployeesBtn = document.getElementById('addRowEmployees');
+        const changePasswordBtn = document.getElementById('changePasswordBtn');
+        const downloadPDFBtn = document.getElementById('downloadPDF');
+        const downloadExcelBtn = document.getElementById('downloadExcel');
+        const summaryContent = document.getElementById('summaryContent');
+        const downloadOptions = document.getElementById('downloadOptions');
+        
+        // Calculator elements
+        const calcDisplayGeneral = document.getElementById('calcDisplayGeneral');
+        const calcDisplayExpenses = document.getElementById('calcDisplayExpenses');
+        const calcDisplayEmployees = document.getElementById('calcDisplayEmployees');
+        
+        // Calculator state
+        let calcState = {
+            general: { display: '0', firstOperand: null, waitingForSecondOperand: false, operator: null },
+            expenses: { display: '0', firstOperand: null, waitingForSecondOperand: false, operator: null },
+            employees: { display: '0', firstOperand: null, waitingForSecondOperand: false, operator: null }
+        };
+        
+        // Initialize app
+        function init() {
+            loadGeneralData();
+            loadExpensesData();
+            loadEmployeesData();
+            
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            checkDailySummary();
+            setInterval(checkDailySummary, 60000);
+            
+            // Event listeners
+            loginBtn.addEventListener('click', login);
+            logoutBtn.addEventListener('click', logout);
+            addRowGeneralBtn.addEventListener('click', () => addRow('general'));
+            addRowExpensesBtn.addEventListener('click', () => addRow('expenses'));
+            addRowEmployeesBtn.addEventListener('click', () => addRow('employees'));
+            changePasswordBtn.addEventListener('click', changePassword);
+            downloadPDFBtn.addEventListener('click', downloadPDF);
+            downloadExcelBtn.addEventListener('click', downloadExcel);
+            
+            setupCalculator('general');
+            setupCalculator('expenses');
+            setupCalculator('employees');
+            
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+        }
+        
+        function setupCalculator(type) {
+            const display = type === 'general' ? calcDisplayGeneral : 
+                           type === 'expenses' ? calcDisplayExpenses : calcDisplayEmployees;
+            const container = display.parentElement;
+            const buttons = container.querySelectorAll('.calc-btn');
+            
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const calcValue = button.getAttribute('data-calc');
+                    handleCalculator(type, calcValue);
+                });
+            });
+        }
+        
+        function handleCalculator(type, value) {
+            const state = calcState[type];
+            const display = type === 'general' ? calcDisplayGeneral : 
+                           type === 'expenses' ? calcDisplayExpenses : calcDisplayEmployees;
+            
+            if (value === 'clear') {
+                state.display = '0';
+                state.firstOperand = null;
+                state.waitingForSecondOperand = false;
+                state.operator = null;
+            } else if (value === '.') {
+                if (!state.display.includes('.')) {
+                    state.display += '.';
+                }
+            } else if (value === 'sqrt') {
+                state.display = String(Math.sqrt(parseFloat(state.display)));
+            } else if (['+', '-', '*', '/'].includes(value)) {
+                const inputValue = parseFloat(state.display);
+                
+                if (state.firstOperand === null) {
+                    state.firstOperand = inputValue;
+                } else if (state.operator) {
+                    const result = performCalculation(state.operator, state.firstOperand, inputValue);
+                    state.display = String(result);
+                    state.firstOperand = result;
+                }
+                
+                state.waitingForSecondOperand = true;
+                state.operator = value;
+            } else if (value === '=') {
+                if (state.operator && state.firstOperand !== null) {
+                    const inputValue = parseFloat(state.display);
+                    const result = performCalculation(state.operator, state.firstOperand, inputValue);
+                    state.display = String(result);
+                    state.firstOperand = null;
+                    state.operator = null;
+                    state.waitingForSecondOperand = false;
+                }
+            } else if (['(', ')'].includes(value)) {
+                state.display += value;
+            } else {
+                if (state.waitingForSecondOperand) {
+                    state.display = value;
+                    state.waitingForSecondOperand = false;
+                } else {
+                    state.display = state.display === '0' ? value : state.display + value;
+                }
+            }
+            
+            display.value = state.display;
+        }
+        
+        function performCalculation(operator, firstOperand, secondOperand) {
+            switch (operator) {
+                case '+': return firstOperand + secondOperand;
+                case '-': return firstOperand - secondOperand;
+                case '*': return firstOperand * secondOperand;
+                case '/': return firstOperand / secondOperand;
+                default: return secondOperand;
+            }
+        }
+        
+        function updateDateTime() {
+            const now = new Date();
+            const caracasTime = new Date(now.toLocaleString("en-US", {timeZone: "America/Caracas"}));
+            
+            const options = { 
+                weekday: 'short', 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            
+            currentDateTime.textContent = caracasTime.toLocaleDateString('es-ES', options);
+        }
+        
+        function login() {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+            
+            if (!username || !password) {
+                showNotification('Por favor ingrese usuario y contraseña', 'error');
+                return;
+            }
+            
+            const user = userData.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                loginSection.classList.add('hidden');
+                mainSection.classList.remove('hidden');
+                showNotification(`Bienvenido, ${username}`);
+                
+                if (!user.isAdmin) {
+                    document.querySelectorAll('.admin-only').forEach(el => {
+                        el.classList.add('hidden');
+                    });
+                }
+                
+                usernameInput.value = '';
+                passwordInput.value = '';
+            } else {
+                showNotification('Usuario o contraseña incorrectos', 'error');
+            }
+        }
+        
+        function logout() {
+            currentUser = null;
+            mainSection.classList.add('hidden');
+            loginSection.classList.remove('hidden');
+            showNotification('Sesión cerrada correctamente');
+        }
+        
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.remove('hidden');
+            
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+        
+        function switchTab(tabId) {
+            navTabs.forEach(tab => {
+                if (tab.getAttribute('data-tab') === tabId) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            tabContents.forEach(content => {
+                if (content.id === `${tabId}Tab`) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+        
+        function addRow(tableType) {
+            let table;
+            if (tableType === 'general') {
+                table = generalTable;
+            } else if (tableType === 'expenses') {
+                table = expensesTable;
+            } else if (tableType === 'employees') {
+                table = employeesTable;
+            }
+            
+            const row = document.createElement('tr');
+            
+            if (tableType === 'general') {
+                row.innerHTML = `
+                    <td><input type="text" class="form-control" placeholder="Material"></td>
+                    <td><input type="text" class="form-control" placeholder="Tipo"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Cantidad"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Precio"></td>
+                    <td><input type="text" class="form-control" placeholder="Recibido"></td>
+                    <td><input type="text" class="form-control" placeholder="Dentino"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Precio Ves"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Precio USD"></td>
+                    <td><button class="btn btn-danger delete-row">Eliminar</button></td>
+                `;
+            } else if (tableType === 'expenses') {
+                row.innerHTML = `
+                    <td><input type="text" class="form-control" placeholder="Ingresos"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Cantidad"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Total"></td>
+                    <td><input type="text" class="form-control" placeholder="Egresos"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Egresos Total"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Operaciones"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Salarios"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Adm"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Mantenimiento"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Expansiones"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Mejoras"></td>
+                    <td><button class="btn btn-danger delete-row">Eliminar</button></td>
+                `;
+            } else if (tableType === 'employees') {
+                row.innerHTML = `
+                    <td><input type="text" class="form-control" placeholder="Empleado"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Días"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Noches"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Redobles"></td>
+                    <td><input type="text" class="form-control" placeholder="Cargo"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Salario día"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Salario noche"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Redobles"></td>
+                    <td><input type="text" class="form-control" placeholder="Día libre"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Descuentos"></td>
+                    <td><input type="number" class="form-control input-numeric" placeholder="Otros"></td>
+                    <td><input type="date" class="form-control"></td>
+                    <td><input type="date" class="form-control"></td>
+                    <td><button class="btn btn-danger delete-row">Eliminar</button></td>
+                `;
+            }
+            
+            table.appendChild(row);
+            
+            row.querySelector('.delete-row').addEventListener('click', function() {
+                row.remove();
+                saveData(tableType);
+                calculateTotals(tableType);
+            });
+            
+            const inputs = row.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('change', () => {
+                    saveData(tableType);
+                    calculateTotals(tableType);
+                });
+                
+                if (input.classList.contains('input-numeric')) {
+                    input.addEventListener('input', () => {
+                        calculateTotals(tableType);
+                    });
+                }
+            });
+            
+            saveData(tableType);
+            calculateTotals(tableType);
+        }
+        
+        function calculateTotals(tableType) {
+            if (tableType === 'general') {
+                let totalCantidad = 0, totalPrecio = 0, totalPrecioVes = 0, totalPrecioUSD = 0;
+                
+                generalTable.querySelectorAll('tr').forEach(row => {
+                    const inputs = row.querySelectorAll('.input-numeric');
+                    if (inputs.length >= 4) {
+                        totalCantidad += parseFloat(inputs[0].value) || 0;
+                        totalPrecio += parseFloat(inputs[1].value) || 0;
+                        totalPrecioVes += parseFloat(inputs[2].value) || 0;
+                        totalPrecioUSD += parseFloat(inputs[3].value) || 0;
+                    }
+                });
+                
+                document.getElementById('totalCantidad').textContent = totalCantidad.toFixed(2);
+                document.getElementById('totalPrecio').textContent = totalPrecio.toFixed(2);
+                document.getElementById('totalPrecioVes').textContent = totalPrecioVes.toFixed(2);
+                document.getElementById('totalPrecioUSD').textContent = totalPrecioUSD.toFixed(2);
+            } else if (tableType === 'expenses') {
+                let totalExpCantidad = 0, totalExpCantidadTotal = 0, totalExpEgresosTotal = 0;
+                let totalExpGastosOperaciones = 0, totalExpSalarios = 0, totalExpGastosAdm = 0;
+                let totalExpMantenimiento = 0, totalExpExpansiones = 0, totalExpMejoras = 0;
+                
+                expensesTable.querySelectorAll('tr').forEach(row => {
+                    const inputs = row.querySelectorAll('.input-numeric');
+                    if (inputs.length >= 8) {
+                        totalExpCantidad += parseFloat(inputs[0].value) || 0;
+                        totalExpCantidadTotal += parseFloat(inputs[1].value) || 0;
+                        totalExpEgresosTotal += parseFloat(inputs[2].value) || 0;
+                        totalExpGastosOperaciones += parseFloat(inputs[3].value) || 0;
+                        totalExpSalarios += parseFloat(inputs[4].value) || 0;
+                        totalExpGastosAdm += parseFloat(inputs[5].value) || 0;
+                        totalExpMantenimiento += parseFloat(inputs[6].value) || 0;
+                        totalExpExpansiones += parseFloat(inputs[7].value) || 0;
+                        totalExpMejoras += parseFloat(inputs[8].value) || 0;
+                    }
+                });
+                
+                document.getElementById('totalExpCantidad').textContent = totalExpCantidad.toFixed(2);
+                document.getElementById('totalExpCantidadTotal').textContent = totalExpCantidadTotal.toFixed(2);
+                document.getElementById('totalExpEgresosTotal').textContent = totalExpEgresosTotal.toFixed(2);
+                document.getElementById('totalExpGastosOperaciones').textContent = totalExpGastosOperaciones.toFixed(2);
+                document.getElementById('totalExpSalarios').textContent = totalExpSalarios.toFixed(2);
+                document.getElementById('totalExpGastosAdm').textContent = totalExpGastosAdm.toFixed(2);
+                document.getElementById('totalExpMantenimiento').textContent = totalExpMantenimiento.toFixed(2);
+                document.getElementById('totalExpExpansiones').textContent = totalExpExpansiones.toFixed(2);
+                document.getElementById('totalExpMejoras').textContent = totalExpMejoras.toFixed(2);
+            } else if (tableType === 'employees') {
+                let totalEmpDias = 0, totalEmpNoches = 0, totalEmpRedobles = 0, totalEmpSalarioDia = 0;
+                let totalEmpSalarioNoche = 0, totalEmpRedoblesPago = 0, totalEmpDescuentos = 0, totalEmpOtros = 0;
+                
+                employeesTable.querySelectorAll('tr').forEach(row => {
+                    const inputs = row.querySelectorAll('.input-numeric');
+                    if (inputs.length >= 8) {
+                        totalEmpDias += parseFloat(inputs[0].value) || 0;
+                        totalEmpNoches += parseFloat(inputs[1].value) || 0;
+                        totalEmpRedobles += parseFloat(inputs[2].value) || 0;
+                        totalEmpSalarioDia += parseFloat(inputs[3].value) || 0;
+                        totalEmpSalarioNoche += parseFloat(inputs[4].value) || 0;
+                        totalEmpRedoblesPago += parseFloat(inputs[5].value) || 0;
+                        totalEmpDescuentos += parseFloat(inputs[6].value) || 0;
+                        totalEmpOtros += parseFloat(inputs[7].value) || 0;
+                    }
+                });
+                
+                document.getElementById('totalEmpDias').textContent = totalEmpDias.toFixed(2);
+                document.getElementById('totalEmpNoches').textContent = totalEmpNoches.toFixed(2);
+                document.getElementById('totalEmpRedobles').textContent = totalEmpRedobles.toFixed(2);
+                document.getElementById('totalEmpSalarioDia').textContent = totalEmpSalarioDia.toFixed(2);
+                document.getElementById('totalEmpSalarioNoche').textContent = totalEmpSalarioNoche.toFixed(2);
+                document.getElementById('totalEmpRedoblesPago').textContent = totalEmpRedoblesPago.toFixed(2);
+                document.getElementById('totalEmpDescuentos').textContent = totalEmpDescuentos.toFixed(2);
+                document.getElementById('totalEmpOtros').textContent = totalEmpOtros.toFixed(2);
+            }
+        }
+        
+        function saveData(tableType) {
+            if (tableType === 'general') {
+                const rows = [];
+                generalTable.querySelectorAll('tr').forEach(row => {
+                    const rowData = [];
+                    row.querySelectorAll('input').forEach(input => {
+                        rowData.push(input.value);
+                    });
+                    if (rowData.length > 0) {
+                        rows.push(rowData);
+                    }
+                });
+                localStorage.setItem('generalData', JSON.stringify(rows));
+            } else if (tableType === 'expenses') {
+                const rows = [];
+                expensesTable.querySelectorAll('tr').forEach(row => {
+                    const rowData = [];
+                    row.querySelectorAll('input').forEach(input => {
+                        rowData.push(input.value);
+                    });
+                    if (rowData.length > 0) {
+                        rows.push(rowData);
+                    }
+                });
+                localStorage.setItem('expensesData', JSON.stringify(rows));
+            } else if (tableType === 'employees') {
+                const rows = [];
+                employeesTable.querySelectorAll('tr').forEach(row => {
+                    const rowData = [];
+                    row.querySelectorAll('input').forEach(input => {
+                        rowData.push(input.value);
+                    });
+                    if (rowData.length > 0) {
+                        rows.push(rowData);
+                    }
+                });
+                localStorage.setItem('employeesData', JSON.stringify(rows));
+            }
+        }
+        
+        function loadGeneralData() {
+            const data = JSON.parse(localStorage.getItem('generalData')) || [];
+            data.forEach(rowData => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><input type="text" class="form-control" value="${rowData[0] || ''}"></td>
+                    <td><input type="text" class="form-control" value="${rowData[1] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[2] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[3] || ''}"></td>
+                    <td><input type="text" class="form-control" value="${rowData[4] || ''}"></td>
+                    <td><input type="text" class="form-control" value="${rowData[5] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[6] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[7] || ''}"></td>
+                    <td><button class="btn btn-danger delete-row">Eliminar</button></td>
+                `;
+                generalTable.appendChild(row);
+                
+                row.querySelector('.delete-row').addEventListener('click', function() {
+                    row.remove();
+                    saveData('general');
+                    calculateTotals('general');
+                });
+                
+                const inputs = row.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.addEventListener('change', () => {
+                        saveData('general');
+                        calculateTotals('general');
+                    });
+                    
+                    if (input.classList.contains('input-numeric')) {
+                        input.addEventListener('input', () => {
+                            calculateTotals('general');
+                        });
+                    }
+                });
+            });
+            
+            calculateTotals('general');
+        }
+        
+        function loadExpensesData() {
+            const data = JSON.parse(localStorage.getItem('expensesData')) || [];
+            data.forEach(rowData => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><input type="text" class="form-control" value="${rowData[0] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[1] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[2] || ''}"></td>
+                    <td><input type="text" class="form-control" value="${rowData[3] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[4] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[5] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[6] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[7] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[8] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[9] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[10] || ''}"></td>
+                    <td><button class="btn btn-danger delete-row">Eliminar</button></td>
+                `;
+                expensesTable.appendChild(row);
+                
+                row.querySelector('.delete-row').addEventListener('click', function() {
+                    row.remove();
+                    saveData('expenses');
+                    calculateTotals('expenses');
+                });
+                
+                const inputs = row.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.addEventListener('change', () => {
+                        saveData('expenses');
+                        calculateTotals('expenses');
+                    });
+                    
+                    if (input.classList.contains('input-numeric')) {
+                        input.addEventListener('input', () => {
+                            calculateTotals('expenses');
+                        });
+                    }
+                });
+            });
+            
+            calculateTotals('expenses');
+        }
+        
+        function loadEmployeesData() {
+            const data = JSON.parse(localStorage.getItem('employeesData')) || [];
+            data.forEach(rowData => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><input type="text" class="form-control" value="${rowData[0] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[1] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[2] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[3] || ''}"></td>
+                    <td><input type="text" class="form-control" value="${rowData[4] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[5] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[6] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[7] || ''}"></td>
+                    <td><input type="text" class="form-control" value="${rowData[8] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[9] || ''}"></td>
+                    <td><input type="number" class="form-control input-numeric" value="${rowData[10] || ''}"></td>
+                    <td><input type="date" class="form-control" value="${rowData[11] || ''}"></td>
+                    <td><input type="date" class="form-control" value="${rowData[12] || ''}"></td>
+                    <td><button class="btn btn-danger delete-row">Eliminar</button></td>
+                `;
+                employeesTable.appendChild(row);
+                
+                row.querySelector('.delete-row').addEventListener('click', function() {
+                    row.remove();
+                    saveData('employees');
+                    calculateTotals('employees');
+                });
+                
+                const inputs = row.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.addEventListener('change', () => {
+                        saveData('employees');
+                        calculateTotals('employees');
+                    });
+                    
+                    if (input.classList.contains('input-numeric')) {
+                        input.addEventListener('input', () => {
+                            calculateTotals('employees');
+                        });
+                    }
+                });
+            });
+            
+            calculateTotals('employees');
+        }
+        
+        function changePassword() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showNotification('Por favor complete todos los campos', 'error');
+                return;
+            }
+            
+            if (currentPassword !== currentUser.password) {
+                showNotification('La contraseña actual es incorrecta', 'error');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showNotification('Las nuevas contraseñas no coinciden', 'error');
+                return;
+            }
+            
+            const userIndex = userData.findIndex(u => u.username === currentUser.username);
+            if (userIndex !== -1) {
+                userData[userIndex].password = newPassword;
+                currentUser.password = newPassword;
+                localStorage.setItem('userData', JSON.stringify(userData));
+                
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+                
+                showNotification('Contraseña cambiada correctamente');
+            }
+        }
+        
+        function checkDailySummary() {
+            const now = new Date();
+            const caracasTime = new Date(now.toLocaleString("en-US", {timeZone: "America/Caracas"}));
+            
+            if (caracasTime.getHours() === 23 && caracasTime.getMinutes() === 59) {
+                generateDailySummary();
+            }
+        }
+        
+        function generateDailySummary() {
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('es-ES');
+            
+            const generalData = JSON.parse(localStorage.getItem('generalData')) || [];
+            const expensesData = JSON.parse(localStorage.getItem('expensesData')) || [];
+            const employeesData = JSON.parse(localStorage.getItem('employeesData')) || [];
+            
+            let totalGeneral = 0, totalExpenses = 0, totalEmployees = 0;
+            
+            generalData.forEach(row => {
+                totalGeneral += parseFloat(row[7]) || 0;
+            });
+            
+            expensesData.forEach(row => {
+                totalExpenses += parseFloat(row[4]) || 0;
+            });
+            
+            employeesData.forEach(row => {
+                const salaryDay = parseFloat(row[5]) || 0;
+                const salaryNight = parseFloat(row[6]) || 0;
+                const redobles = parseFloat(row[7]) || 0;
+                const discounts = parseFloat(row[9]) || 0;
+                const others = parseFloat(row[10]) || 0;
+                
+                totalEmployees += (salaryDay + salaryNight + redobles) - (discounts + others);
+            });
+            
+            const summary = `
+                <div style="color: #6BBE66; font-weight: bold; margin-bottom: 10px;">Resumen del día ${dateStr}</div>
+                <p><strong>Total de ingresos:</strong> $${totalGeneral.toFixed(2)}</p>
+                <p><strong>Total de egresos:</strong> $${totalExpenses.toFixed(2)}</p>
+                <p><strong>Total de salarios:</strong> $${totalEmployees.toFixed(2)}</p>
+                <p><strong>Balance del día:</strong> $${(totalGeneral - totalExpenses - totalEmployees).toFixed(2)}</p>
+                <p><strong>Registros generales:</strong> ${generalData.length}</p>
+                <p><strong>Registros de gastos:</strong> ${expensesData.length}</p>
+                <p><strong>Registros de empleados:</strong> ${employeesData.length}</p>
+            `;
+            
+            summaryContent.innerHTML = summary;
+            downloadOptions.classList.remove('hidden');
+            
+            const summaries = JSON.parse(localStorage.getItem('dailySummaries')) || [];
+            summaries.push({
+                date: dateStr,
+                summary: summary,
+                generalData: generalData,
+                expensesData: expensesData,
+                employeesData: employeesData,
+                totalGeneral: totalGeneral,
+                totalExpenses: totalExpenses,
+                totalEmployees: totalEmployees
+            });
+            localStorage.setItem('dailySummaries', JSON.stringify(summaries));
+            
+            showNotification('Resumen diario generado correctamente');
+            
+            generalTable.innerHTML = '';
+            expensesTable.innerHTML = '';
+            employeesTable.innerHTML = '';
+            localStorage.removeItem('generalData');
+            localStorage.removeItem('expensesData');
+            localStorage.removeItem('employeesData');
+            
+            calculateTotals('general');
+            calculateTotals('expenses');
+            calculateTotals('employees');
+        }
+        
+        function downloadPDF() {
+            const summaries = JSON.parse(localStorage.getItem('dailySummaries')) || [];
+            if (summaries.length === 0) {
+                showNotification('No hay resúmenes disponibles', 'warning');
+                return;
+            }
+            
+            const lastSummary = summaries[summaries.length - 1];
+            let content = `
+                <html>
+                <head>
+                    <title>Resumen Diario</title>
+                    <style>
+                        body { font-family: Arial; margin: 20px; background: #50514F; color: white; }
+                        h1 { color: #6BBE66; }
+                        h2 { color: #6BBE66; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                        th, td { border: 1px solid #6BBE66; padding: 8px; text-align: left; }
+                        th { background: #6BBE66; color: #50514F; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Resumen Diario - ${lastSummary.date}</h1>
+                    <p><strong>Total de ingresos:</strong> $${lastSummary.totalGeneral.toFixed(2)}</p>
+                    <p><strong>Total de egresos:</strong> $${lastSummary.totalExpenses.toFixed(2)}</p>
+                    <p><strong>Total de salarios:</strong> $${lastSummary.totalEmployees.toFixed(2)}</p>
+                    <p><strong>Balance del día:</strong> $${(lastSummary.totalGeneral - lastSummary.totalExpenses - lastSummary.totalEmployees).toFixed(2)}</p>
+                </body>
+                </html>
+            `;
+            
+            const blob = new Blob([content], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `resumen_${lastSummary.date.replace(/\//g, '-')}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('PDF descargado correctamente');
+        }
+        
+        function downloadExcel() {
+            const summaries = JSON.parse(localStorage.getItem('dailySummaries')) || [];
+            if (summaries.length === 0) {
+                showNotification('No hay resúmenes disponibles', 'warning');
+                return;
+            }
+            
+            const lastSummary = summaries[summaries.length - 1];
+            let csvContent = "data:text/csv;charset=utf-8,";
+            
+            csvContent += `Resumen Diario - ${lastSummary.date}\n\n`;
+            csvContent += `Total de ingresos,${lastSummary.totalGeneral.toFixed(2)}\n`;
+            csvContent += `Total de egresos,${lastSummary.totalExpenses.toFixed(2)}\n`;
+            csvContent += `Total de salarios,${lastSummary.totalEmployees.toFixed(2)}\n`;
+            csvContent += `Balance del día,${(lastSummary.totalGeneral - lastSummary.totalExpenses - lastSummary.totalEmployees).toFixed(2)}\n\n`;
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `resumen_${lastSummary.date.replace(/\//g, '-')}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('Excel descargado correctamente');
+        }
+        
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+        
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(registration => {
+                console.log('ServiceWorker registration successful');
+            }).catch(err => {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
